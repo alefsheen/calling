@@ -1,0 +1,32 @@
+{
+  "name": "javanesafa-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js",
+    "seed": "node seed.js",
+    "update": "node updateFollower.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.1",
+    "express-mongo-sanitize": "^1.3.2",
+    "express-rate-limit": "^3.5.0",
+    "helmet": "^3.16.0",
+    "kavenegar": "^1.1.4",
+    "mongoose": "^8.9.1",
+    "morgan": "^1.9.1",
+    "node-telegram-bot-api": "github:alirezarahiminasab/node-telegram-bot-api#master",
+    "socket.io": "^4.8.1",
+    "xlsx": "^0.18.5",
+    "xss-clean": "^0.1.1"
+  }
+}

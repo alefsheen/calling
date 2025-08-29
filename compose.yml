@@ -1,0 +1,80 @@
+services:
+  backend:
+    build:
+      context: ./calling-backend
+      dockerfile: Dockerfile
+    container_name: in-backend
+    ports:
+      - "3003:3000"
+    environment:
+      - NODE_ENV=production
+      - MONGO_URI=mongodb://rootuser:ro23ifno3inFEf@mongodb:27017/calling?authSource=admin
+      - PORT=3000
+    depends_on:
+      - mongodb
+    volumes:
+      - ./backend/contacts_mokeb.xlsx:/app/contacts_mokeb.xlsx
+    networks:
+      - in-network
+
+  mongodb:
+    image: mongo:latest
+    container_name: inmongo
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=rootuser
+      - MONGO_INITDB_ROOT_PASSWORD=ro23ifno3inFEf
+      - MONGO_INITDB_DATABASE=calling
+    volumes:
+      - ./data/mongo-data:/data/db
+    networks:
+      - in-network
+
+  # front:
+  #   container_name: in-frontend
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3004:3000"
+  #   environment:
+  #     - NODE_ENV=production
+  #     - NEXT_PUBLIC_LIARA_MEKYAL_NODE=https://jamandeh.com:3003
+  #   depends_on:
+  #     - backend
+  #   networks:
+  #     - in-network
+
+  # admin:
+  #   container_name: in-admin
+  #   build:
+  #     context: ./admin
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3005:3000"
+  #   environment:
+  #     - NODE_ENV=production
+  #     - NEXT_PUBLIC_LIARA_MEKYAL_NODE=https://jamandeh.com:3003
+  #   depends_on:
+  #     - backend
+  #   networks:
+  #     - in-network
+
+#  nginx:
+#    image: nginx
+#    container_name: in-nginx
+#    ports:
+#      - "80:80"
+#    volumes:
+#      - ./conf:/etc/nginx/conf.d
+#    depends_on:
+#      - backend
+#      - admin
+#      - front
+#    networks:
+#      - in-network
+
+networks:
+  in-network:
+    driver: bridge
