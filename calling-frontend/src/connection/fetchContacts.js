@@ -3,7 +3,7 @@ import { server_url } from "./socket";
 
 export function updateRating(id, param, rate) {
   // Update present status in backend
-  fetch(`https://tavana-server.liara.run/api/v1/contacts/${id}`, {
+  fetch(`${server_url}/api/v1/contacts/${id}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",

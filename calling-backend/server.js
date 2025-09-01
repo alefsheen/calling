@@ -62,9 +62,9 @@ httpServer.listen(port, () => {
 
 // dotenv.config({ path: "./config.env" });
 
-const DB =
-  "mongodb://root:yqmxp30zy7N1282fD34332yX@chogolisa.liara.cloud:32893/mirkazemi?authSource=admin";
-// const DB = process.env.MONGO_PUBLIC_URI;
+// const DB =
+//   "mongodb://root:yqmxp30zy7N1282fD34332yX@chogolisa.liara.cloud:32893/mirkazemi?authSource=admin";
+const DB = process.env.MONGO_URI;
 mongoose.connect(DB).then(() => {
   console.log("DB connection successful!");
   // bot_init();

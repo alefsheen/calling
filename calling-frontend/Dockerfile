@@ -1,17 +1,25 @@
-FROM node:20.9.0-alpine AS in-front
+FROM node:20.11.1-alpine AS build
 
 # Setting working directory. All the path will be relative to WORKDIR
 WORKDIR /app
 
 # Copying source files
-COPY . .
-RUN ls -ltrha
-RUN npm install --legacy-peer-deps
+COPY . ./
+RUN npm install --registry="https://mirror-npm.runflare.com"
 RUN npm run build
 
-EXPOSE 3000
+# Production image
+FROM nginx:alpine
 
-# Running the app
-CMD ["npm", "run" , "preview"]
+# Copy the build output from the previous stage
+COPY --from=build /app/dist /usr/share/nginx/html
 
-#ENTRYPOINT ["npm", "start"]
+# Copy nginx configuration to default conf
+COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx/404.html /usr/share/nginx/html/
+
+# Expose port 80
+EXPOSE 80
+
+# Start Nginx server
+CMD ["nginx", "-g", "daemon off;"]

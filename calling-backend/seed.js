@@ -8,9 +8,9 @@ const Evaluation = require("./models/evaluationModel");
 require("dotenv").config();
 
 // MongoDB connection
-// const mongoURI = process.env.MONGO_PUBLIC_URI;
-const DB =
-  "mongodb://root:yqmxp30zy7N1282fD34332yX@chogolisa.liara.cloud:32893/mirkazemi?authSource=admin";
+const mongoURI = process.env.MONGO_URI;
+// const DB =
+//   "mongodb://root:yqmxp30zy7N1282fD34332yX@chogolisa.liara.cloud:32893/mirkazemi?authSource=admin";
 
 mongoose
   .connect(DB)

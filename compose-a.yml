@@ -1,0 +1,21 @@
+services:
+  admin:
+    container_name: in-admin
+    build:
+      context: ./calling-admin
+      dockerfile: Dockerfile
+    ports:
+      - "3007:3000"
+    # environment:
+    #   - NODE_ENV=production
+    #   - NEXT_PUBLIC_SERVER=https://callapi.mostadrak.com
+    #   - NEXT_PUBLIC_USERNAME=admin
+    #   - NEXT_PUBLIC_PASSWORD=110110
+    # depends_on:
+    #   - backend
+    networks:
+      - in-network
+
+networks:
+  in-network:
+    driver: bridge

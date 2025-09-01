@@ -5,15 +5,15 @@ services:
       dockerfile: Dockerfile
     container_name: in-backend
     ports:
-      - "3003:3000"
+      - "3008:3000"
     environment:
       - NODE_ENV=production
       - MONGO_URI=mongodb://rootuser:ro23ifno3inFEf@mongodb:27017/calling?authSource=admin
       - PORT=3000
     depends_on:
       - mongodb
-    volumes:
-      - ./backend/contacts_mokeb.xlsx:/app/contacts_mokeb.xlsx
+    # volumes:
+    #   - ./backend/contacts_mokeb.xlsx:/app/contacts_mokeb.xlsx
     networks:
       - in-network
 
@@ -31,35 +31,38 @@ services:
     networks:
       - in-network
 
-  # front:
-  #   container_name: in-frontend
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "3004:3000"
-  #   environment:
-  #     - NODE_ENV=production
-  #     - NEXT_PUBLIC_LIARA_MEKYAL_NODE=https://jamandeh.com:3003
-  #   depends_on:
-  #     - backend
-  #   networks:
-  #     - in-network
+  front:
+    container_name: in-frontend
+    working_dir: /app
+    build:
+      context: ./calling-frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3006:80"
+    # environment:
+    #   - NODE_ENV=production
+    #   - VITE_SERVER=https://callapi.mostadrak.com
+    depends_on:
+      - backend
+    networks:
+      - in-network
 
-  # admin:
-  #   container_name: in-admin
-  #   build:
-  #     context: ./admin
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "3005:3000"
-  #   environment:
-  #     - NODE_ENV=production
-  #     - NEXT_PUBLIC_LIARA_MEKYAL_NODE=https://jamandeh.com:3003
-  #   depends_on:
-  #     - backend
-  #   networks:
-  #     - in-network
+  admin:
+    container_name: in-admin
+    build:
+      context: ./calling-admin
+      dockerfile: Dockerfile
+    ports:
+      - "3007:3000"
+    # environment:
+    #   - NODE_ENV=production
+    #   - NEXT_PUBLIC_SERVER=https://callapi.mostadrak.com
+    #   - NEXT_PUBLIC_USERNAME=admin
+    #   - NEXT_PUBLIC_PASSWORD=110110
+    depends_on:
+      - backend
+    networks:
+      - in-network
 
 #  nginx:
 #    image: nginx

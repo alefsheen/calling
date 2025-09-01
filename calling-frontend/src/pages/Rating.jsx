@@ -4,27 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import ProgressBar from "../components/ProgressBar";
 
 export default function Rating() {
-  //   const [contact, setContact] = useState({});
   const { id } = useParams();
-
-  //   // Fetch contacts from backend
-  //   useEffect(() => {
-  //     async function fetchContacts() {
-  //       try {
-  //         const res = await fetch(
-  //           `https://javanesafa-server.liara.run/api/v1/contacts/${id}`
-  //         );
-  //         const data = await res.json();
-  //         console.log(data.data);
-
-  //         setContact(data.data.data);
-  //       } catch (err) {
-  //         console.error("Failed to fetch contacts:", err);
-  //       }
-  //     }
-  //     fetchContacts();
-  //     // setContacts(contactListData);
-  //   }, []);
 
   return (
     <div>
@@ -43,14 +23,7 @@ export default function Rating() {
         "param11",
         "param12",
       ].map((param) => (
-        <ProgressBar
-          key={param}
-          //   param={param}
-          //   contactID={contact._id}
-          //   handleClick={(rate) => handleClick(param, rate)}
-          //   contacts={contact}
-          //   setContacts={setContact}
-        />
+        <ProgressBar key={param} />
       ))}
     </div>
   );

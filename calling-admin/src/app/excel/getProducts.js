@@ -1,7 +1,7 @@
 import toast from "react-hot-toast";
 
 export async function getProducts() {
-  let url = `${process.env.NEXT_PUBLIC_LIARA_MEKYAL_NODE}/api/v1/contacts`;
+  let url = `${process.env.NEXT_PUBLIC_SERVER}/api/v1/contacts`;
 
   try {
     const response = await fetch(url);

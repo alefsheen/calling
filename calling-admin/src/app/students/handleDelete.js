@@ -3,7 +3,7 @@ export async function handleDelete(publisher, setProducts) {
   if (confirmed) {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_LIARA_MEKYAL_NODE}/api/v1/contacts/${publisher._id}`,
+        `${process.env.NEXT_PUBLIC_SERVER}/api/v1/contacts/${publisher._id}`,
         {
           method: "DELETE",
         }

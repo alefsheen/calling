@@ -5,7 +5,7 @@ export async function getProducts({
   sortDirection = "asc",
   role = "user",
 }) {
-  let url = `${process.env.NEXT_PUBLIC_LIARA_MEKYAL_NODE}/api/v1/events?limit=${process.env.NEXT_PUBLIC_LIMIT_PRODUCTS}`;
+  let url = `${process.env.NEXT_PUBLIC_SERVER}/api/v1/events?limit=${process.env.NEXT_PUBLIC_LIMIT_PRODUCTS}`;
   if (page) url += `&page=${page}`;
   if (search) url += `&search=${search}`;
   if (sort)

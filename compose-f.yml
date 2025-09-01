@@ -1,0 +1,20 @@
+services:
+  front:
+    container_name: in-frontend
+    working_dir: /app
+    build:
+      context: ./calling-frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3006:80"
+    # environment:
+    #   - NODE_ENV=production
+    #   - VITE_SERVER=https://callapi.mostadrak.com
+    # depends_on:
+    #   - backend
+    networks:
+      - in-network
+
+networks:
+  in-network:
+    driver: bridge

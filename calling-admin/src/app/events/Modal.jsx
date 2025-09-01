@@ -30,8 +30,8 @@ export function Modal({ setModal, modal, setProducts }) {
     const method = modal.type === "create" ? "POST" : "PATCH";
     const url =
       modal.type === "create"
-        ? `${process.env.NEXT_PUBLIC_LIARA_MEKYAL_NODE}/api/v1/events`
-        : `${process.env.NEXT_PUBLIC_LIARA_MEKYAL_NODE}/api/v1/events/${formData._id}`;
+        ? `${process.env.NEXT_PUBLIC_SERVER}/api/v1/events`
+        : `${process.env.NEXT_PUBLIC_SERVER}/api/v1/events/${formData._id}`;
 
     try {
       const response = await fetch(url, {

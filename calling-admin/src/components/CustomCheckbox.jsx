@@ -15,7 +15,7 @@ export default function CustomCheckbox({ publisher, setProducts }) {
     );
 
     try {
-      const url = `${process.env.NEXT_PUBLIC_LIARA_MEKYAL_NODE}/api/v1/contacts/${publisher._id}`;
+      const url = `${process.env.NEXT_PUBLIC_SERVER}/api/v1/contacts/${publisher._id}`;
       const response = await fetch(url, {
         method: "PATCH",
         body: JSON.stringify({ ...publisher, active: !checked }),

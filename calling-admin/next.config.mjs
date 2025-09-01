@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["mekyal.storage.c2.liara.space"],
+    // domains: ["mekyal.storage.c2.liara.space"],
   },
 };
 
