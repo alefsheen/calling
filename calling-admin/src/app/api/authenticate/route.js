@@ -9,7 +9,7 @@ export async function POST(request) {
     username === process.env.NEXT_PUBLIC_USERNAME &&
     password === process.env.NEXT_PUBLIC_PASSWORD
   ) {
-    return NextResponse.json({ success: true, token: "mekyal-online-shop" });
+    return NextResponse.json({ success: true, token: "SET_THE_TOKEN" });
   } else {
     return NextResponse.json(
       { success: false, message: "Invalid credentials" },

@@ -5,6 +5,17 @@ export const tableColumns = [
     sortKey: "lastName",
   },
   {
+    label: "نقش",
+    value: (publisher) => {
+      const role = publisher.role || "------";
+      if (role === "admin") return "مدیر";
+      if (role === "mentor") return "منتور";
+      if (role === "help mentor") return "کمک منتور";
+      return role;
+    },
+    sortKey: "role",
+  },
+  {
     label: "رمز عبور",
     value: (publisher) => publisher.phone || "------",
     sortKey: "phone",

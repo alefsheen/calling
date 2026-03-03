@@ -1,3 +1,4 @@
+require("dotenv").config();
 const mongoose = require("mongoose");
 
 const { createServer } = require("http");
@@ -46,7 +47,7 @@ io.on("connection", (socket) => {
   // });
 });
 
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 httpServer.listen(port, () => {
   console.log(`App running on port ${port}...`);
@@ -62,8 +63,6 @@ httpServer.listen(port, () => {
 
 // dotenv.config({ path: "./config.env" });
 
-// const DB =
-//   "mongodb://root:yqmxp30zy7N1282fD34332yX@chogolisa.liara.cloud:32893/mirkazemi?authSource=admin";
 const DB = process.env.MONGO_URI;
 mongoose.connect(DB).then(() => {
   console.log("DB connection successful!");

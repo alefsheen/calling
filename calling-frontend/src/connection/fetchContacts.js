@@ -26,6 +26,49 @@ export function updateRating(id, param, rate) {
     });
 }
 
+export async function fetchEvents(setEvents, setLoadingError) {
+  try {
+    const res = await fetch(`${server_url}/api/v1/events?sort=-date`);
+    const data = await res.json();
+    setEvents(data.data || []);
+  } catch (err) {
+    console.error("Failed to fetch events:", err);
+    setLoadingError(
+      "خطا در بارگذاری برنامه‌ها، لطفا از اتصال دستگاه خود به اینترنت مطمئن شوید."
+    );
+  }
+}
+
+export async function fetchContactsByEvent(
+  setContacts,
+  eventID,
+  setLoadingError
+) {
+  try {
+    // fetchContacts
+    const res1 = await fetch(`${server_url}/api/v1/contacts`);
+    const data1 = await res1.json();
+    const contacts = data1.data.sort((a, b) =>
+      a.lastName.localeCompare(b.lastName)
+    );
+
+    // presents
+    const res3 = await fetch(
+      `${server_url}/api/v1/callings?eventID=${eventID}&fields=contactID,present,message1_recorder,message2_recorder`
+    );
+    const data3 = await res3.json();
+    const presents = data3.data;
+
+    // merge
+    setContacts(mergeArrays(contacts, presents));
+  } catch (err) {
+    console.error("Failed to fetch contacts:", err);
+    setLoadingError(
+      "خطا در بارگذاری محتوا، لطفا از اتصال دستگاه خود به اینترنت مطمئن شوید."
+    );
+  }
+}
+
 export async function fetchContacts(
   setContacts,
   setLastEvent,

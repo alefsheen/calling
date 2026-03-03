@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import { Route, Routes } from "react-router-dom";
-import { fetchContacts } from "./connection/fetchContacts";
+import { fetchContacts, fetchEvents, fetchContactsByEvent } from "./connection/fetchContacts";
 import { socket } from "./connection/socket";
 import { handle_socket_server } from "./connection/socket_functions";
 import Error from "./others/Error";
@@ -15,6 +15,8 @@ export default function App() {
   // const [mode, setMode] = useState("tab1");
   const [contacts, setContacts] = useState([]);
   const [lastEvent, setLastEvent] = useState(null);
+  const [events, setEvents] = useState([]);
+  const [selectedEvent, setSelectedEvent] = useState(null);
   const [loadingError, setLoadingError] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     const storedAuth = localStorage.getItem("javanesafa_auth");
@@ -28,6 +30,7 @@ export default function App() {
   useEffect(() => {
     handle_socket_server(setContacts, setLoadingError);
     fetchContacts(setContacts, setLastEvent, setLoadingError);
+    fetchEvents(setEvents, setLoadingError);
 
     socket.on("updatePresents", ({ _currentUser, _contacts }) => {
       // console.log("on updatePresents");
@@ -35,15 +38,35 @@ export default function App() {
     });
   }, []);
 
-  const admins = contacts.filter((c) => c.role === "admin");
+  // Set selectedEvent to lastEvent when lastEvent is loaded
+  useEffect(() => {
+    if (lastEvent && !selectedEvent) {
+      setSelectedEvent(lastEvent);
+    }
+  }, [lastEvent]);
+
+  // Update contacts when selectedEvent changes
+  useEffect(() => {
+    if (selectedEvent?._id) {
+      fetchContactsByEvent(setContacts, selectedEvent._id, setLoadingError);
+    }
+  }, [selectedEvent]);
+
+  const mentors = contacts.filter((c) => c.role === "mentor" || c.role === "help mentor");
+  const loginContacts = mentors; // مربی‌ها و کمک مربی‌ها می‌تونن لاگین کنن
+  const currentUserRole = isAuthenticated ? JSON.parse(isAuthenticated).role : null;
+  const isMentor = currentUserRole === "mentor";
+  
   let users = contacts.filter((c) => {
+    const event = selectedEvent || lastEvent;
+    if (!event) return false;
     const cond1 =
-      lastEvent.group === "همه" ? true : c.group === lastEvent.group;
+      event.group === "همه" ? true : c.group === event.group;
     const cond2 = c.active === true;
 
     return c.role === "user" && cond1 && cond2;
   });
-  if (activeTab2 === "tab5")
+  if (activeTab2 === "tab5" && !isMentor)
     users = users.filter((u) => {
       return (
         u.follower &&
@@ -52,10 +75,15 @@ export default function App() {
       );
     });
 
+  const handleLogout = () => {
+    localStorage.removeItem("javanesafa_auth");
+    setIsAuthenticated(null);
+  };
+
   function handleConditions(page) {
     if (!isAuthenticated)
       return (
-        <SignIn contacts={admins} setIsAuthenticated={setIsAuthenticated} />
+        <SignIn contacts={loginContacts} setIsAuthenticated={setIsAuthenticated} />
       );
     if (loadingError) return <Error loadingError={loadingError} />;
     return page;
@@ -71,11 +99,15 @@ export default function App() {
             <Home
               contacts={users}
               setContacts={setContacts}
-              lastEvent={lastEvent}
+              lastEvent={selectedEvent || lastEvent}
+              events={events}
+              selectedEvent={selectedEvent}
+              setSelectedEvent={setSelectedEvent}
               activeTab={activeTab}
               setActiveTab={setActiveTab}
               activeTab2={activeTab2}
               setActiveTab2={setActiveTab2}
+              onLogout={handleLogout}
             />
           )}
         />
@@ -85,10 +117,11 @@ export default function App() {
             <Calling
               users={users}
               contacts={contacts}
-              lastEvent={lastEvent}
+              lastEvent={selectedEvent || lastEvent}
               activeTab={activeTab}
               setActiveTab={setActiveTab}
               setContacts={setContacts}
+              isMentor={isMentor}
             />
           )}
         />
@@ -98,10 +131,11 @@ export default function App() {
             <Evaluation
               users={users}
               contacts={contacts}
-              lastEvent={lastEvent}
+              lastEvent={selectedEvent || lastEvent}
               activeTab={activeTab}
               setActiveTab={setActiveTab}
               setContacts={setContacts}
+              isMentor={isMentor}
             />
           )}
         />

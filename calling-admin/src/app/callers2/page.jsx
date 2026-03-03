@@ -12,7 +12,10 @@ function Callers() {
   const [contacts, setContacts] = useState([]);
 
   function contactOf(id) {
-    return contacts.find((c) => c._id === id).lastName;
+    const contact = contacts.find((c) => c._id === id);
+    if (typeof contact == "object") {
+      return contacts.find((c) => c._id === id).lastName;
+    }
   }
 
   useEffect(() => {

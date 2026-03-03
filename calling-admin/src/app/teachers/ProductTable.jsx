@@ -69,13 +69,7 @@ export const ProductTable = () => {
     _sortDirection = sortDirection,
     append = false,
   }) {
-    const options = {
-      page: _page,
-      search: _searchQuery,
-      sort: _sortColumn,
-      sortDirection: _sortDirection,
-      role: "admin",
-    };
+    const roles = ["admin", "mentor", "help mentor"];
 
     if (loading) {
       // Abort the previous fetch if it's still in progress
@@ -92,9 +86,28 @@ export const ProductTable = () => {
 
     try {
       setLoading(true);
-      const result = await getProducts(options, { signal });
+      
+      // Fetch products for all roles in parallel
+      const promises = roles.map((role) => {
+        const options = {
+          page: _page,
+          search: _searchQuery,
+          sort: _sortColumn,
+          sortDirection: _sortDirection,
+          role: role,
+        };
+        return getProducts(options, { signal });
+      });
+
+      const results = await Promise.all(promises);
+      
+      // Combine all results and add role to each product
+      const combinedResults = results.flatMap((result, index) => 
+        result.map(product => ({ ...product, role: roles[index] }))
+      );
+      
       setProducts((prevState) => {
-        return append ? [...prevState, ...result] : result;
+        return append ? [...prevState, ...combinedResults] : combinedResults;
       });
     } catch (error) {
       if (error.name !== "AbortError") {

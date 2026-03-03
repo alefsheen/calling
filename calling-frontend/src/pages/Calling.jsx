@@ -13,6 +13,7 @@ export default function Calling({
   activeTab,
   setActiveTab,
   setContacts,
+  isMentor = false,
 }) {
   const navigate = useNavigate();
 
@@ -71,8 +72,9 @@ export default function Calling({
         info={info}
         setContacts={setContacts}
         contacts={contacts}
+        isMentor={isMentor}
       />
-      {currentUser === currentFollwer && (
+      {(currentUser === currentFollwer || isMentor) && (
         <CurrentEvent
           contact={contact}
           setCallings={setCallings}
@@ -80,6 +82,7 @@ export default function Calling({
           info={info}
           result={result}
           setResult={setResult}
+          isMentor={isMentor}
         />
       )}
       <Timeline contact={contact} callings={callings} info={info} />
@@ -115,6 +118,7 @@ function Follower({
   setResult,
   setContacts,
   contacts,
+  isMentor = false,
 }) {
   const {
     currentUser,
@@ -123,7 +127,7 @@ function Follower({
     message,
     message_recorder,
   } = info;
-  const hasAnotherFollower = currentFollwer && currentFollwer !== currentUser;
+  const hasAnotherFollower = currentFollwer && currentFollwer !== currentUser && !isMentor;
   const currentFollwerExist = currentCalling?.[message_recorder]?.length > 0;
   // console.log(callings);
   // console.log(currentFollwer);
@@ -258,6 +262,7 @@ function CurrentEvent({
   info,
   setResult,
   result,
+  isMentor = false,
 }) {
   const {
     currentUser,
@@ -266,7 +271,7 @@ function CurrentEvent({
     message,
     message_recorder,
   } = info;
-  const hasAnotherFollower = currentFollwer && currentFollwer !== currentUser;
+  const hasAnotherFollower = currentFollwer && currentFollwer !== currentUser && !isMentor;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 

@@ -36,6 +36,11 @@ const menuItems = [
     icon: <FaTags className="w-5 h-5" />,
   },
   // {
+  //   href: "/logout",
+  //   label: "خروج از حساب",
+  //   icon: <FaTags className="w-5 h-5" />,
+  // },
+  // {
   //   href: "/excel",
   //   label: "اکسل",
   //   icon: <FaTags className="w-5 h-5" />,

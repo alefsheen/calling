@@ -11,12 +11,27 @@ export default function Home({
   contacts,
   setContacts,
   lastEvent,
+  events,
+  selectedEvent,
+  setSelectedEvent,
   activeTab,
   setActiveTab,
   activeTab2,
   setActiveTab2,
+  onLogout,
 }) {
   const currentUser = getCurrentUser();
+  
+  const getRoleLabel = (role) => {
+    const roleLabels = {
+      "mentor": "مربی",
+      "help mentor": "کمک مربی",
+      "user": "دانش‌آموز",
+      "admin": "مدیر"
+    };
+    return roleLabels[role] || role;
+  };
+  
   // console.log(contacts);
 
   // Count Present contacts
@@ -38,9 +53,10 @@ export default function Home({
       navigate(`/calling/${contact._id}`);
     if (activeTab === "tab4") navigate(`/evaluation/${contact._id}`);
     if (activeTab === "tab2") {
+      const currentEvent = selectedEvent || lastEvent;
       updateCallings({
         contactID: contact._id,
-        eventID: lastEvent?._id,
+        eventID: currentEvent?._id,
         present_recorder: currentUser?.lastName,
         present: !contact.present,
       });
@@ -125,31 +141,70 @@ export default function Home({
   return (
     <div className=" bg-gray-900 min-h-screen">
       <div className="sticky top-0 bg-gray-800 z-10 p-1 shadow-md rounded-b-xl flex-col justify-between p-2">
-        <div className="grid grid-cols-3 gap-2 text-white mb-2">
-          <div className="bg-gray-900 rounded-lg p-1">
-            <p className="text-xs">عنوان برنامه: </p>
-            <h1 className="text-xs font-bold text-center text-yellow-500 mt-1">
-              {lastEvent?.eventName}
-            </h1>
+        {/* User Info and Logout */}
+        <div className="flex justify-between items-center mb-2 p-2 bg-gray-900 rounded-lg">
+          <div className="flex items-center gap-2">
+            <p className="text-xs text-gray-400">کاربر:</p>
+            <p className="text-sm font-bold text-yellow-500">{currentUser?.lastName}</p>
+            {currentUser?.role && (
+              <>
+                <span className="text-gray-600">|</span>
+                <p className="text-xs text-gray-400">نقش:</p>
+                <p className="text-xs font-semibold text-blue-400">{getRoleLabel(currentUser.role)}</p>
+              </>
+            )}
           </div>
-          <div className="bg-gray-900 rounded-lg p-1">
-            <p className="text-xs">تاریخ: </p>
-            <h1 className="text-xs font-bold text-center text-yellow-500 mt-1">
-              {unix2date(lastEvent?.date)}
-            </h1>
+          <button
+            onClick={onLogout}
+            className="bg-red-600 hover:bg-red-700 text-white text-xs font-semibold px-3 py-1 rounded-lg transition-colors"
+          >
+            خروج
+          </button>
+        </div>
+        <div className="mb-2">
+          <div className="bg-gray-900 rounded-lg p-2 mb-2">
+            <p className="text-xs text-white mb-1">انتخاب برنامه: </p>
+            <select
+              value={selectedEvent?._id || ""}
+              onChange={(e) => {
+                const event = events.find((ev) => ev._id === e.target.value);
+                if (event) setSelectedEvent(event);
+              }}
+              className="w-full bg-gray-800 text-white text-sm rounded-lg p-2 border border-gray-700 focus:border-yellow-500 focus:outline-none"
+            >
+              {events.map((event) => (
+                <option key={event._id} value={event._id}>
+                  {event.eventName} - {unix2date(event.date)} ({event.group})
+                </option>
+              ))}
+            </select>
           </div>
-          <div className="bg-gray-900 rounded-lg p-1">
-            <p className="text-xs">مدرسه: </p>
-            <h1 className="text-xs font-bold text-center text-yellow-500 mt-1">
-              {lastEvent?.group}
-            </h1>
-          </div>
-          {/* <div className="bg-gray-900 rounded-lg p-1">
+          <div className="grid grid-cols-3 gap-2 text-white">
+            <div className="bg-gray-900 rounded-lg p-1">
+              <p className="text-xs">عنوان برنامه: </p>
+              <h1 className="text-xs font-bold text-center text-yellow-500 mt-1">
+                {lastEvent?.eventName}
+              </h1>
+            </div>
+            <div className="bg-gray-900 rounded-lg p-1">
+              <p className="text-xs">تاریخ: </p>
+              <h1 className="text-xs font-bold text-center text-yellow-500 mt-1">
+                {unix2date(lastEvent?.date)}
+              </h1>
+            </div>
+            <div className="bg-gray-900 rounded-lg p-1">
+              <p className="text-xs">مدرسه: </p>
+              <h1 className="text-xs font-bold text-center text-yellow-500 mt-1">
+                {lastEvent?.group}
+              </h1>
+            </div>
+            {/* <div className="bg-gray-900 rounded-lg p-1">
             <p className="text-xs">سطح: </p>
             <h1 className="text-xs font-bold text-center text-yellow-500 mt-1">
               {lastEvent?.group2}
             </h1>
           </div> */}
+          </div>
         </div>
         <Tabs
           activeTab={activeTab}

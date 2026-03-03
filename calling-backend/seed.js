@@ -9,8 +9,6 @@ require("dotenv").config();
 
 // MongoDB connection
 const mongoURI = process.env.MONGO_URI;
-// const DB =
-//   "mongodb://root:yqmxp30zy7N1282fD34332yX@chogolisa.liara.cloud:32893/mirkazemi?authSource=admin";
 
 mongoose
   .connect(DB)
@@ -18,7 +16,7 @@ mongoose
   .catch((err) => console.error("MongoDB connection error:", err));
 
 // Read Excel file
-const workbook = xlsx.readFile("contacts29.xlsx"); // Replace 'contacts.xlsx' with your file name
+const workbook = xlsx.readFile("contacts.xlsx"); // Replace 'contacts.xlsx' with your file name
 const sheetName = workbook.SheetNames[0];
 const sheetData = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
 // console.log(sheetData);
