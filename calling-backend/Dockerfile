@@ -7,7 +7,7 @@ COPY . .
 RUN pwd
 RUN ls -ltrha
 
-RUN npm install
+RUN npm ci --no-audit --no-fund
 
 EXPOSE 3000
 
