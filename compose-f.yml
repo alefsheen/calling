@@ -10,8 +10,8 @@ services:
     # environment:
     #   - NODE_ENV=production
     #   - VITE_SERVER=https://callapi.mostadrak.com
-    # depends_on:
-    #   - backend
+    depends_on:
+      - backend
     networks:
       - in-network
 

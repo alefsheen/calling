@@ -216,6 +216,7 @@ export default function Home({
       {contactsFor("سطح 1")}
       {contactsFor("سطح 2")}
       {contactsFor("سطح 3")}
+      {contactsFor("سطح 4 (دعوت نشده)")}
     </div>
   );
 }
